@@ -57,8 +57,13 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Lifecycle Components
+    // Lifecycle ViewModel Components
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+
+    //Scalable Size
+    implementation("com.intuit.sdp:sdp-android:1.1.0")
+    implementation("com.intuit.ssp:ssp-android:1.1.0")
+
 
 
 
