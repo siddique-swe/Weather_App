@@ -50,8 +50,9 @@
         android:tint="@color/sonic_silver"
         app:layout_constraintBottom_toBottomOf="@id/imageLocation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textCurrentDate"
+        app:layout_constraintTop_toTopOf="@+id/imageLocation"
         />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

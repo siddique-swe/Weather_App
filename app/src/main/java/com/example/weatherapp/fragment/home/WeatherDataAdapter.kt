@@ -37,7 +37,7 @@ class WeatherDataAdapter(
         holder.bind(weatherData[position] as CurrentLocation)
     }
 
-    //inner class
+    //inner class weatherDataRecyclerView adapter
     inner class CurrentLocationViewHolder(
         private val binding: ItemContainerCurrentLocationBinding
     ): RecyclerView.ViewHolder(binding.root){

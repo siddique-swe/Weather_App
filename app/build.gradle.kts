@@ -52,6 +52,7 @@ dependencies {
     // Navigation Component
     implementation("androidx.navigation:navigation-ui-ktx:2.8.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.4")
+    implementation ("androidx.fragment:fragment-ktx:1.6.1")
 
     // Retrofit (Networking)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -63,6 +64,7 @@ dependencies {
     //Scalable Size
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("com.intuit.ssp:ssp-android:1.1.0")
+
 
 
 
