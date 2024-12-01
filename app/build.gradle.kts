@@ -65,8 +65,16 @@ dependencies {
     implementation("com.intuit.sdp:sdp-android:1.1.0")
     implementation("com.intuit.ssp:ssp-android:1.1.0")
 
+    //koin (dependency injection
+    implementation("io.insert-koin:koin-android:3.4.2")
 
+    //coil
+    implementation("io.coil-kt:coil:2.5.0")
 
+    // location
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
+    //swipe Refresh Layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }
