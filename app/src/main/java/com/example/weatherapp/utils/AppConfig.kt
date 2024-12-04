@@ -1,6 +1,7 @@
 package com.example.weatherapp.utils
 
 import android.app.Application
+import com.example.weatherapp.dependency_injection.networkModule
 import com.example.weatherapp.dependency_injection.repositoryModule
 import com.example.weatherapp.dependency_injection.serializerModule
 import com.example.weatherapp.dependency_injection.storageModule
@@ -18,7 +19,8 @@ class AppConfig : Application() {
                     repositoryModule,
                     viewModelModule,
                     serializerModule,
-                    storageModule
+                    storageModule,
+                    networkModule
                 )
             )
         }

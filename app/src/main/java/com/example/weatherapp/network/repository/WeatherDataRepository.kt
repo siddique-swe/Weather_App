@@ -3,11 +3,13 @@ package com.example.weatherapp.network.repository
 import android.annotation.SuppressLint
 import android.location.Geocoder
 import com.example.weatherapp.data.CurrentLocation
+import com.example.weatherapp.data.RemoteLocation
+import com.example.weatherapp.network.api.WeatherApi
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
 
-class WeatherDataRepository {
+class WeatherDataRepository(private val weatherApi: WeatherApi) {
     @SuppressLint("MissingPermission")
     fun getCurrentLocation(
         fusedLocationProviderClient: FusedLocationProviderClient,
@@ -44,7 +46,9 @@ class WeatherDataRepository {
                 location = addressText.toString()
             )
         }?: currentLocation
-
-
+    }
+    suspend fun searchLocation(query : String): List<RemoteLocation>?{
+        val response = weatherApi.searchLocation(query = query)
+        return if (response.isSuccessful) response.body() else null
     }
 }
