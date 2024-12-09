@@ -59,9 +59,9 @@ class HomeFragment : Fragment() {
         }else {
             Toast.makeText(requireContext(),"location permission denied", Toast.LENGTH_SHORT).show()
         }
-
-
     }
+    private var isInitialLocationSet: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,8 +74,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setWeatherDateAdapter()
-        setWeatherDate(currentLocation = sharedPreferenceManager.getCurrentLocation())
         setObserver()
+        setListeners()
+
+        if(!isInitialLocationSet){
+            setCurrentLocation(currentLocation = sharedPreferenceManager.getCurrentLocation())
+            isInitialLocationSet=true
+        }
+    }
+    private fun setListeners(){
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            setCurrentLocation(sharedPreferenceManager.getCurrentLocation())
+        }
     }
     private fun setObserver(){
         with(homeViewModel){
@@ -87,21 +97,37 @@ class HomeFragment : Fragment() {
                currentLocationDataState.currentLocation?.let { currentLocation ->
                    hideLoading()
                    sharedPreferenceManager.saveCurrentLocation(currentLocation)
-                   setWeatherDate(currentLocation)
+                   setCurrentLocation(currentLocation)
                }
                currentLocationDataState.error?.let { error ->
                    hideLoading()
                    Toast.makeText(requireContext(),error,Toast.LENGTH_SHORT).show()
                }
            }
+            weatherData.observe(viewLifecycleOwner){
+                val weatherDataState = it.getContentInfoNoHandled() ?: return@observe
+                binding.swipeRefreshLayout.isRefreshing = weatherDataState.isLoading
+                weatherDataState.currentWeather?.let { currentWeather ->
+                    weatherDataAdapter.setCurrentWeather(currentWeather)
+                }
+                weatherDataState.forecast?.let { forecasts ->
+                    weatherDataAdapter.setForeCastData(forecasts)
+                }
+                weatherDataState.error?.let { error ->
+                    Toast.makeText(requireContext(),error,Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
     private fun setWeatherDateAdapter(){
+        binding.weatherDataRecyclerView.itemAnimator = null
         binding.weatherDataRecyclerView.adapter = weatherDataAdapter
     }
-    private fun setWeatherDate(currentLocation: CurrentLocation? = null){
-        weatherDataAdapter.setData(data = listOf(currentLocation ?: CurrentLocation()))
+    private fun setCurrentLocation(currentLocation: CurrentLocation? = null){
+        weatherDataAdapter.setCurrentLocation(currentLocation ?: CurrentLocation())
+        currentLocation?.let { getWeatherData(currentLocation = it) }
+
     }
 
     private fun getCurrentLocation(){
@@ -140,12 +166,14 @@ class HomeFragment : Fragment() {
     private fun showLoading(){
         with(binding){
             weatherDataRecyclerView.visibility = View.GONE
+            swipeRefreshLayout.isEnabled = false
             swipeRefreshLayout.isRefreshing = true
         }
     }
     private fun hideLoading(){
         with(binding){
             weatherDataRecyclerView.visibility = View.VISIBLE
+            swipeRefreshLayout.isEnabled = true
             swipeRefreshLayout.isRefreshing = false
         }
     }
@@ -164,7 +192,7 @@ class HomeFragment : Fragment() {
                 longitude = bundle.getDouble(KEY_LONGITUDE)
             )
             sharedPreferenceManager.saveCurrentLocation((currentLocation))
-            setWeatherDate(currentLocation)
+            setCurrentLocation(currentLocation)
 
 
         }
@@ -172,5 +200,14 @@ class HomeFragment : Fragment() {
 
     private fun stopListeningManualLocationSelection(){
         clearFragmentResultListener(REQUEST_KEY_MANUAL_LOCATION_SEARCH)
+    }
+
+    private fun getWeatherData(currentLocation: CurrentLocation){
+        if(currentLocation.latitude != null && currentLocation.longitude != null){
+            homeViewModel.getWeatherData(
+                latitude = currentLocation.latitude,
+                longitude = currentLocation.longitude
+            )
+        }
     }
 }

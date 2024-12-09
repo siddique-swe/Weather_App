@@ -15,7 +15,6 @@ class LocationsAdapter( private val onLocationClicked: (RemoteLocation) -> Unit)
         locations.addAll(data)
         notifyDataSetChanged()
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocationViewHolder {
         return LocationViewHolder(
             ItemContainerCurrentLocationBinding.inflate(
@@ -25,15 +24,12 @@ class LocationsAdapter( private val onLocationClicked: (RemoteLocation) -> Unit)
             )
         )
     }
-
     override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
         holder.bind(remoteLocation = locations[position])
     }
-
     override fun getItemCount(): Int {
         return locations.size
     }
-
     inner class LocationViewHolder(
         private val binding : ItemContainerCurrentLocationBinding
     ): RecyclerView.ViewHolder(binding.root){

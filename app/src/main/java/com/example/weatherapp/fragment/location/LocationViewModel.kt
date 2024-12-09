@@ -12,7 +12,6 @@ class LocationViewModel ( private val weatherDataRepository: WeatherDataReposito
 
     private val _searchResult = MutableLiveData<SearchResultDataState>()
     val searchResult: LiveData<SearchResultDataState> get() = _searchResult
-
     fun searchLocation(query: String){
         viewModelScope.launch {
             emitSearchResultState(isLoading = true)
@@ -24,7 +23,6 @@ class LocationViewModel ( private val weatherDataRepository: WeatherDataReposito
             }
         }
     }
-
     private fun emitSearchResultState(
         isLoading: Boolean = false,
         locations: List<RemoteLocation>? = null,
@@ -33,11 +31,9 @@ class LocationViewModel ( private val weatherDataRepository: WeatherDataReposito
         val searchResultDataState = SearchResultDataState(isLoading, locations, error)
         _searchResult.value = searchResultDataState
     }
-
     data class SearchResultDataState(
         val isLoading : Boolean,
         val locations : List<RemoteLocation>?,
         val error: String?
     )
-
 }
